@@ -2,6 +2,8 @@
 <!-- MDN 재단의 '순수한 자바스크립트를 이용한 2D 벽돌깨기 게임' 문서 참조
 https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9C_%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EB%A5%BC_%EC%9D%B4%EC%9A%A9%ED%95%9C_2D_%EB%B2%BD%EB%8F%8C%EA%B9%A8%EA%B8%B0_%EA%B2%8C%EC%9E%84 -->
 
+<!-- 추후 재확인 필요한 부분은 (!) 앞에 달아 주석처리해놓음 -->
+
 <html>
 
   <head>
@@ -34,15 +36,28 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
 
       var x = canvas.width/2;
       var y = canvas.height-30;
+      // 공의 시작 위치 설정을 위한 위한 x, y 변수 설정
 
       var dx = 2;
       var dy = -2;
+      // 매회 공의 위치 변화를 위한 dx, dy 변수 설정
 
       var ballRadius = 10;
+      // 공이 모서리에 부딪힐 때 공의 중심좌표가 아닌 공의 테두리가 부딪히는 것으로 인식하게 하기 위해 공의 반지름 변수 설정
 
       var colorArray = ["#0066CC", "#66FF99", "#FF9900", "#CC66FF"];
       var randomcolor = colorArray[Math.floor(Math.random() * colorArray.length)];
       // 색상 랜덤변환 : Stackoverflow 참고 https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
+
+      var paddleWidth = 75;
+      var paddleHeight = 10;
+      var paddleX = (canvas.width-paddleWidth)/2;
+      var paddleY = (canvas.height-paddleHeight);
+      // 공을 치기 위한 paddle의 너비, 높이, 시작 x좌표 설정
+
+      var leftPressed = false;
+      var rightPressed = false;
+      // 키보드 ← → 버튼이 눌렸는지 확인하기 위한 변수. 처음에는 둘 다 눌리지 않았으므로 false 값으로 설정.
 
       function drawBall() {
         ctx.beginPath();
@@ -50,25 +65,96 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
         ctx.fill();
         ctx.closePath();
       }
+      // 공을 그리고 색칠하는 함수
+
+      function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+        /*
+        ctx.fillStyle = "#0095DD";
+        */
+        ctx.fill();
+        ctx.closePath();
+      }
+      // paddle을 그리고 색칠하는 함수
 
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBall();
+        drawPaddle();
+        // (!) drawPaddle()을 추가하면 공의 색상 변환이 정상 작동하지 않았음. ctx.fillStyle()이 canvas 위의 모든 도형에 대해 색상을 적용하기 때문으로 추정됨.
+        // (!)) drawPaddle()에서 ctx.fillStyle()을 제외하면 모서리에 닿았을 때 색상이 다시 바뀌나, 문제는 paddle도 같이 바뀜. 공만 바뀌게 하는 방법 알아보기.
         x += dx;
         y += dy;
 
         if (x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
           dx = -dx;
         }
-        if (y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+        if (y + dy < ballRadius) {
           dy = -dy;
+        } else if (y + dy > canvas.height-ballRadius) {
+          if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+            if(dx > 0) {
+              dx += 1;
+            } else if(dx < 0) {
+              dx -= 1;
+            }
+            if(dy > 0) {
+              dy += 1;
+            } else if(dy < 0) {
+              dy -= 1;
+            }
+          }
+          // (exercise) 공의 '테두리'가 paddle에 닿았을 때 공의 속도를 빠르게 함
+          else {
+            alert("Game Over!");
+            // (!) 알림창이 두 개가 연속으로 뜸. 하단 모서리 닫기 직전, 그리고 닿았을 때의 두 번.
+            document.location.reload();
+          }
+          // 공의 '테두리'가 캔버스의 하단 모서리에 닿았을 때, 공의 x 좌표가 paddle의 너비 사이에 있다면 튕겨내는 조건문
         }
+        // 공의 '테두리'(정확히는 공의 중심의 x, y좌표에서 ballRadius를 +-한 x, y 값의 집합)가 캔버스의 모서리에 닿았을 때 방향을 바꿔 튕겨나오게 하는 조건문
+        // + 공의 '테두리'가 캔버스 하단 모서리에 닿았을 때 "Game Over!" 알림창을 출력하고 알림창을 없애면 페이지를 다시 불러와 게임을 다시 시작하는 조건문.
         if (x + dx == canvas.width-ballRadius || x + dx == ballRadius || y + dy == canvas.height-ballRadius || y + dy == ballRadius) {
           ctx.fillStyle = colorArray[Math.floor(Math.random() * colorArray.length)];
         }
-        // || 논리 연산자는 3개 이상의 항목도 적용 가능
-        // ctx.fillStyle = randomcolor로 작성하면 최초 1회만 변경됨. 이 부분에 대한 추가 확인이 필요할 듯
+        // (exercise) 공의 테두리가 캔버스의 모서리에 닿았을 때 공의 색상을 바꾸는 조건문
+        // (!) ctx.fillStyle = randomcolor로 작성하면 최초 1회만 변경됨. 이 부분에 대한 추가 확인이 필요
+        // ※ || 논리 연산자는 3개 이상의 항목도 적용 가능
+
+
+        if(rightPressed && paddleX < canvas.width - paddleWidth) {
+          paddleX += 8;
+        } else if(leftPressed && paddleX > 0) {
+          paddleX += -8;
+        }
+        // ← →를 누를 때마다 paddle의 X 좌표를 7씩 바꿈
+        // 계속 누르면 화면 밖을 나가게 되므로 paddle의 X 좌표가 캔버스 안에 위치할 때만 좌표를 바꾸도록 && (and) 논리연산자 추가
       }
+
+      document.addEventListener("keydown", keyDownHandler, false);
+      document.addEventListener("keyup", keyUpHandler, false);
+      // 키보드 중 어떤 키가 눌리면 "keydown" 이벤트가 발생되며, keyDownHandler() 함수 실행. 키에서 손을 떼면 "keyup" 이벤트가 발생하고 keyUpHandler() 함수 실행
+
+      function keyDownHandler(e) {
+        if(e.keyCode == 39) {
+          rightPressed = true;
+        } else if(e.keyCode == 37) {
+          leftPressed = true;
+        }
+      }
+
+      function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+          rightPressed = false;
+        } else if(e.keyCode == 37) {
+          leftPressed = false;
+        }
+      }
+      // →를 누르면 rightPressed를 true로 떼면 false로 바꾸고, ←를 누르면 leftPressed를 true로 떼면 false로 바꾸는 함수
+      // (!) 두 함수 모두 e 변수로 표시되는 이벤트를 파라미터로 사용함 (무슨 뜻인지 이해하지 못했음)
+      // JavaScript 키보드 Keycode는 https://keycode.info/ 참조
 
       ctx.fillStyle = "#000000";
       setInterval(draw, 10);
