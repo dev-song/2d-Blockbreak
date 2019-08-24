@@ -8,7 +8,7 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
 
   <head>
     <meta charset="utf-8">
-    <title>Gamedev Canvas Workshop</title>
+    <title>Sangsu's first game - Blockbreak</title>
     <style>
       * {
         padding:0; margin:0;
@@ -19,10 +19,19 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
         display: block;
         margin: 0 auto;
       }
+      h1, h3 {
+        text-align: center;
+        width: 600px;
+        margin: auto;
+      }
+      /* 블록 내 텍스트의 정렬은 text-align, 블록 자체의 정렬은 width 설정 후 margin auto 값 설정 */
     </style>
   </head>
 
   <body>
+    <h1>Sangsu's 벽돌깨기 게임</h1>
+    <h3>아직 미완성이라, 벽돌은 없고 패드 튕기기 기능만 있네요ㅎㅎ</h3>
+    <h3>패드에 튕길 때마다 속도가 증가하며, 아래쪽 모서리에 닿으면 게임이 종료됩니다. 재밌게 플레이하세요 :)</h3>
     <canvas id="myCanvas" width="800" height="600">
       <!-- canvas 태그는 게임이 렌더되는 공간을 생성 -->
     </canvas>
