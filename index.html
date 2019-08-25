@@ -56,7 +56,7 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       var ballRadius = 10;
       // 공이 모서리에 부딪힐 때 공의 중심좌표가 아닌 공의 테두리가 부딪히는 것으로 인식하게 하기 위해 공의 반지름 변수 설정
 
-      var colorArray = ["#0066CC", "#66FF99", "#FF9900", "#CC66FF"];
+      var colorArray = ["#003333", "#993366", "#993300", "#006699"];
       var randomcolor = colorArray[Math.floor(Math.random() * colorArray.length)];
       // 색상 랜덤변환 : Stackoverflow 참고 https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
 
@@ -70,6 +70,29 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       var rightPressed = false;
       // 키보드 ← → 버튼이 눌렸는지 확인하기 위한 변수. 처음에는 둘 다 눌리지 않았으므로 false 값으로 설정.
 
+      var brickRowCount = 3;
+      var brickColumnCount = 6;
+      var brickWidth = 90;
+      var brickHeight = 20;
+      var brickPadding = 30;
+      var brickOffsetTop = 30;
+      var brickOffsetLeft = 55;
+      // 벽돌 배열의 행과 열의 수, 벽돌의 너비와 높이, 각 벽돌 사이 및 벽돌과 캔버스 모서리와의 간격 변수 설정
+
+      var bricks = [];
+      for(var c=0; c<brickColumnCount; c++) {
+        bricks[c] = [];
+        for(var r=0; r<brickRowCount; r++) {
+          bricks[c][r] = { x: 0, y: 0, status: 1 };
+          // 공이 벽돌을 치지 않은 기본 상태를 status 1로 설정
+        }
+      }
+      // c열과 r행을 갖는 bricks 배열을 만든 후, 각 벽돌의 x, y 좌표를 설정
+      // ※ ++는 변수를 1 증가시키는 증감 연산자 (a++와 ++a는 차이가 있음 : a++는 다른 연산을 한 후 1을 증가시키고, ++a는 1 증가시킨 후 다른 연산을 함. 참고: https://www.everdevel.com/JavaScript/operator.php)
+
+      var score = 0;
+      // 점수기록을 위한 변수 설정
+
       function drawBall() {
         ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -81,18 +104,37 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       function drawPaddle() {
         ctx.beginPath();
         ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
-        /*
-        ctx.fillStyle = "#0095DD";
-        */
+        // ctx.fillStyle = "#0095DD";
         ctx.fill();
         ctx.closePath();
       }
       // paddle을 그리고 색칠하는 함수
 
+      function drawBricks() {
+        for(var c=0; c<brickColumnCount; c++) {
+          for(var r=0; r<brickRowCount; r++) {
+            if(bricks[c][r].status == 1) {
+              var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+              var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+              // 벽돌들의 x, y 좌표를 다르게 해주는 변수 설정
+              bricks[c][r].x = brickX;
+              bricks[c][r].y = brickY;
+              ctx.beginPath();
+              ctx.rect(brickX, brickY, brickWidth, brickHeight);
+              // ctx.fillStyle = "#0095DD";
+              ctx.fill();
+              ctx.closePath();
+            }
+          }
+        }
+      }
+
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBricks();
         drawBall();
         drawPaddle();
+        collisionDetection();
         // (!) drawPaddle()을 추가하면 공의 색상 변환이 정상 작동하지 않았음. ctx.fillStyle()이 canvas 위의 모든 도형에 대해 색상을 적용하기 때문으로 추정됨.
         // (!)) drawPaddle()에서 ctx.fillStyle()을 제외하면 모서리에 닿았을 때 색상이 다시 바뀌나, 문제는 paddle도 같이 바뀜. 공만 바뀌게 하는 방법 알아보기.
         x += dx;
@@ -107,17 +149,18 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
           if(x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
             if(dx > 0) {
-              dx += 1;
+              dx += 0.4;
             } else if(dx < 0) {
-              dx -= 1;
+              dx -= 0.4;
             }
             if(dy > 0) {
-              dy += 1;
+              dy += 0.4;
             } else if(dy < 0) {
-              dy -= 1;
+              dy -= 0.4;
             }
           }
           // (exercise) 공의 '테두리'가 paddle에 닿았을 때 공의 속도를 빠르게 함
+
           else {
             alert("Game Over!");
             // (!) 알림창이 두 개가 연속으로 뜸. 하단 모서리 닫기 직전, 그리고 닿았을 때의 두 번.
@@ -166,6 +209,38 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       // →를 누르면 rightPressed를 true로 떼면 false로 바꾸고, ←를 누르면 leftPressed를 true로 떼면 false로 바꾸는 함수
       // (!) 두 함수 모두 e 변수로 표시되는 이벤트를 파라미터로 사용함 (무슨 뜻인지 이해하지 못했음)
       // JavaScript 키보드 Keycode는 https://keycode.info/ 참조
+
+      function collisionDetection() {
+        for(var c=0; c<brickColumnCount; c++) {
+          for(var r=0; r<brickRowCount; r++) {
+            var b = bricks[c][r];
+            if(b.status == 1) {
+              if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                dy = -dy;
+                b.status = 0;
+                score++;
+                if(score == brickRowCount*brickColumnCount) {
+                  alert("Congratulations! You win! Total Score: "+score);
+                  document.location.reload();
+                }
+                // 모든 벽돌을 다 부수면 게임 이겼다는 메시지가 나오는 if 조건문 추가
+              }
+              // 공이 벽돌에 충돌했을 때, 즉 공의 x 좌표가 벽돌의 x 좌표와 너비 사이에 있을 때, 그리고 공의 y 좌표가 벽돌의 y 좌표와 높이 사이에 있을 때 방향 전환하는 if 조건문 추가
+              // 공이 벽돌에 충돌했을 때 status를 0으로 만드는 조건문 추가 (충돌 시 0의 status가 되어, 그리지 않게 됨)
+              // 공이 벽돌에 충돌했을 때 score를 1씩 올리는 코드 추가
+              // 벽돌의 윗모서리 아래모서리 부딪히면 정상적으로 작동하나, 옆면으로 들어갈 경우 안에서 겁나 튕겨댐. 양 옆에 충돌할 경우도 판단할 것
+            }
+          }
+        }
+      }
+      // 각 벽돌들에 대해 충돌을 감지하는 함수 설정. 모든 벽돌을 b 변수로 설정.
+
+      function drawScore() {
+        ctx.font = "16px Arial";
+        // ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score :"+score, 8, 20)
+      }
+      // 점수를 나타내는 함수 정의
 
       ctx.fillStyle = "#000000";
       setInterval(draw, 10);
