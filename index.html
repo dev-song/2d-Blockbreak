@@ -30,11 +30,10 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
 
   <body>
     <h1>Sangsu's 벽돌깨기 게임 (PC 버전)</h1>
-    <h3>아직 미완성이라, 벽돌은 없고 패드 튕기기 기능만 있네요ㅎㅎ</h3>
-    <h3>키보드의 ←, → 버튼을 눌러 조작하시면 됩니다.</h3>
-    <h3>패드에 닿을 때마다 빨라지며, 박스 하단에 닿으면 게임오버입니다.</h3>
+    <h3>키보드의 ←, → 버튼을 누르거나, 마우스로 조작하시면 됩니다.</h3>
+    <h3>패드에 닿을 때마다 빨라지고 박스 하단에 닿으면 게임오버됩니다.</h3>
     <h3>재밌게 플레이하세요 :)</h3>
-    <canvas id="myCanvas" width="800" height="600">
+    <canvas id="myCanvas" width="800" height="600" style="margin-bottom:40px">
       <!-- canvas 태그는 게임이 렌더되는 공간을 생성 -->
     </canvas>
 
@@ -134,6 +133,7 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
         drawBricks();
         drawBall();
         drawPaddle();
+        drawScore();
         collisionDetection();
         // (!) drawPaddle()을 추가하면 공의 색상 변환이 정상 작동하지 않았음. ctx.fillStyle()이 canvas 위의 모든 도형에 대해 색상을 적용하기 때문으로 추정됨.
         // (!)) drawPaddle()에서 ctx.fillStyle()을 제외하면 모서리에 닿았을 때 색상이 다시 바뀌나, 문제는 paddle도 같이 바뀜. 공만 바뀌게 하는 방법 알아보기.
@@ -190,6 +190,8 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       document.addEventListener("keydown", keyDownHandler, false);
       document.addEventListener("keyup", keyUpHandler, false);
       // 키보드 중 어떤 키가 눌리면 "keydown" 이벤트가 발생되며, keyDownHandler() 함수 실행. 키에서 손을 떼면 "keyup" 이벤트가 발생하고 keyUpHandler() 함수 실행
+      document.addEventListener("mousemove", mouseMoveHandler, false);
+      // 마우스를 움직이면 "mousemove" 이벤트가 활성화되며, mouseMoveHandler() 함수 실행
 
       function keyDownHandler(e) {
         if(e.keyCode == 39) {
@@ -209,6 +211,16 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       // →를 누르면 rightPressed를 true로 떼면 false로 바꾸고, ←를 누르면 leftPressed를 true로 떼면 false로 바꾸는 함수
       // (!) 두 함수 모두 e 변수로 표시되는 이벤트를 파라미터로 사용함 (무슨 뜻인지 이해하지 못했음)
       // JavaScript 키보드 Keycode는 https://keycode.info/ 참조
+
+      function mouseMoveHandler(e) {
+        var relativeX = e.clientX - canvas.offsetLeft;
+        // 마우스 커서의 x 좌표 (e.clientX) - 화면 가장자리와 캔버스 가장자리의 간격을 게임 내에서의 마우스커서의 상대적 x 좌표를 의미하는 relativeX 변수로 설정
+        if(relativeX > 0 && relativeX < canvas.width) {
+          paddleX = relativeX - paddleWidth/2;
+        }
+      }
+      // 마우스패드의 상대적 좌표가 캔버스의 좌우 사이에 있으면 마우스커서의 좌표에서 paddle 너비의 절반의 왼쪽에 paddle이 그려지는 x 좌표를 지정해주는 if 조건문 설정
+      // (exercise) 기존 if 조건문은 마우스를 가장자리로 움직였을 때 paddle의 중심이 가장자리에 닿을때까지 움직이는데, paddle의 모서리와 캔버스 가장자리가 닿을때까지만 움직이게 수정할 것
 
       function collisionDetection() {
         for(var c=0; c<brickColumnCount; c++) {
@@ -238,7 +250,7 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       function drawScore() {
         ctx.font = "16px Arial";
         // ctx.fillStyle = "#0095DD";
-        ctx.fillText("Score :"+score, 8, 20)
+        ctx.fillText("Score: "+score, 8, 20)
       }
       // 점수를 나타내는 함수 정의
 
