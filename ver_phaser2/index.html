@@ -23,7 +23,7 @@
         </div>
         <div id="description">
         <p>패드를 움직여 공을 튕기고 벽돌을 부수는 단순한 게임입니다.</p>
-        <p>START 버튼을 눌러 시작한 뒤, 마우스로 조작하시면 됩니다.</p>
+        <p>START 버튼을 눌러 시작한 뒤, 터치/마우스로 조작하시면 됩니다.</p>
         <p>공이 패드에 닿는 위치에 따라 각도가 달라지며,</p>
         <p>상자 아래를 벗어나면 게임오버입니다.</p>
         <p>재밌게 플레이하세요 :)</p>
@@ -57,15 +57,16 @@
             // 현재 플레이 중인지를 확인하는 변수 설정
             var startButton;
 
-            textStyle = {font: '16pt Lobster', fill: '#0095DD'};
-
-
             function preload() {
                 game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
                 // scaleMode 옵션: NO_SCALE(화면 맞춤 안 함), EXACT_FIT(종횡비 상관없이 화면에 꽉 채움), SHOW_ALL(종횡비 유지하며 최대로 키움 - 레터박스 등 생길 수 있음), RESIZE & USER_SCALE(숙련자용 기능) 
+
+                
                 game.scale.pageAlignHorizontally = true;
+                /*
                 game.scale.pageAlignVertically = true;
                 // 화면의 크기에 상관없이 canvas를 스크린의 가로/세로 중앙에 위치하게 해 줌
+                */
 
                 /* 게임 스테이지 배경색 설정
                 game.stage.backgroundColor = '#eee';
@@ -74,7 +75,7 @@
                 /* 공을 단일 이미지 대신 애니메이션으로 교체
                 game.load.image('ball', 'img/ball.png');
                 */
-                game.load.image('background', 'img/background_ilsan.png');
+                game.load.image('background', 'img/background.png');
                 game.load.image('paddle', 'img/paddle.png');
                 game.load.image('brick', 'img/brick.png');
                 // 화면에 표시할 이미지를 미리 로드함
@@ -84,6 +85,9 @@
                 game.load.spritesheet('button', 'img/button.png', 120, 40);
                 // 단일한 이미지 대신 여러 이미지의 모음인 spritesheet를 활용할 수 있음. 이 이미지들을 순서대로 보여주며 애니메이션 효과를 만들며, 3/4번째 매개변수는 spritesheet에서 얼만큼의 너비/높이만큼을 잘라 각 프레임에 보여줄지를 설정함.
             }
+
+            var text = null;
+
             function create() {
                 game.add.tileSprite(0, 0, 480, 320, 'background');
                 // 배경용으로 쓰일 이미지 설정 (게임 스테이지 크기만큼의 tile에 Sprite를 지정)
@@ -132,12 +136,14 @@
 
                 initBricks();
 
-                scoreText = game.add.text(5, 5, 'Points: 0', textStyle);
+                textStyle = {font: '16pt Lobster', fill: '#0095DD'};
+
+                scoreText = game.add.text(5, 5, 'Score: 0', textStyle);
                 // .text() 메소드 매개변수: .text(x 좌표, y 좌표, 렌더링될 텍스트, 텍스트의 폰트 특성)
 
                 livesText = game.add.text(game.world.width - 5, 5, 'Lives: '+lives, textStyle);
                 livesText.anchor.set(1, 0);
-                lifeLostText = game.add.text(game.world.width * 0.5, game.world.height * 0.5, 'Life lost, please click to continue', textStyle);
+                lifeLostText = game.add.text(game.world.width * 0.5, game.world.height * 0.5, 'Life lost, please click to continue...', textStyle);
                 lifeLostText.anchor.set(0.5);
                 lifeLostText.visible = false;
                 // lifeLostText는 목숨을 잃었을 때만 보여야 하기 때문에 초기값을 false로 설정
@@ -155,7 +161,13 @@
                     // https://joshua1988.github.io/web-development/javascript/javascript-asynchronous-operation/ 참고
 
                 if(playing) {
-                    paddle.x = game.input.x || game.world.width * 0.5;
+                    if(game.input.x < 42) {
+                        paddle.x = 42;
+                    } else if(game.input.x > game.world.width - 42) {
+                        paddle.x = game.world.width - 42;
+                    } else if(game.input.x > 42 && game.input.x < game.world.width - 42) {
+                        paddle.x = game.input.x || game.world.width * 0.5;
+                    }
                     // paddle의 x 좌표가 마우스의 x 좌표가 되도록, 기본값은 화면에 중앙에 위치하도록 설정
                 }
                 // playing = true일 때만 마우스에 맞춰 패드가 움직임
@@ -205,7 +217,7 @@
                 killTween.start();
 
                 score += 10;
-                scoreText.setText('Points: '+score);
+                scoreText.setText('Score: '+score);
 
                 /*
                 var count_alive = 0;
@@ -243,7 +255,7 @@
                     }, this);
                 }
                 else {
-                    alert('You lost, game over!');
+                    alert('You lost, game over! Your final score is: '+score);
                     location.reload();
                 }
             }

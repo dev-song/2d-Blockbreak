@@ -7,27 +7,77 @@
     margin: 0;
   }
   /* * 선택자는 모든 element를 대상으로 함 */
-  body {
-    background-image: linear-gradient(135deg, rgba(186, 186, 186, 0.03) 0%, rgba(186, 186, 186, 0.03) 10%,rgba(133, 133, 133, 0.03) 10%, rgba(133, 133, 133, 0.03) 14%,rgba(38, 38, 38, 0.03) 14%, rgba(38, 38, 38, 0.03) 17%,rgba(93, 93, 93, 0.03) 17%, rgba(93, 93, 93, 0.03) 25%,rgba(80, 80, 80, 0.03) 25%, rgba(80, 80, 80, 0.03) 45%,rgba(239, 239, 239, 0.03) 45%, rgba(239, 239, 239, 0.03) 100%),linear-gradient(135deg, rgba(236, 236, 236, 0.03) 0%, rgba(236, 236, 236, 0.03) 47%,rgba(182, 182, 182, 0.03) 47%, rgba(182, 182, 182, 0.03) 63%,rgba(223, 223, 223, 0.03) 63%, rgba(223, 223, 223, 0.03) 81%,rgba(86, 86, 86, 0.03) 81%, rgba(86, 86, 86, 0.03) 89%,rgba(23, 23, 23, 0.03) 89%, rgba(23, 23, 23, 0.03) 90%,rgba(226, 226, 226, 0.03) 90%, rgba(226, 226, 226, 0.03) 100%),linear-gradient(45deg, rgba(52, 52, 52, 0.03) 0%, rgba(52, 52, 52, 0.03) 31%,rgba(246, 246, 246, 0.03) 31%, rgba(246, 246, 246, 0.03) 63%,rgba(188, 188, 188, 0.03) 63%, rgba(188, 188, 188, 0.03) 71%,rgba(15, 15, 15, 0.03) 71%, rgba(15, 15, 15, 0.03) 87%,rgba(127, 127, 127, 0.03) 87%, rgba(127, 127, 127, 0.03) 93%,rgba(234, 234, 234, 0.03) 93%, rgba(234, 234, 234, 0.03) 100%),linear-gradient(90deg, #FFF,#FFF)
-  }
-  /* 그라데이션 배경 이미지 참고 : https://www.gradientmagic.com/ */
-  #myCanvas {
-    background-image: url("img/earth_from_space_600x600.jpg");
-    background-color: #eeeeee;
-    /* 배경 이미지 참고 : https://developer.mozilla.org/ko/docs/Web/CSS/background-image */
-    display: block;
-    margin: 0 auto;
-  }
+body {
+  background-image: linear-gradient(135deg, rgba(186, 186, 186, 0.03) 0%, rgba(186, 186, 186, 0.03) 10%,rgba(133, 133, 133, 0.03) 10%, rgba(133, 133, 133, 0.03) 14%,rgba(38, 38, 38, 0.03) 14%, rgba(38, 38, 38, 0.03) 17%,rgba(93, 93, 93, 0.03) 17%, rgba(93, 93, 93, 0.03) 25%,rgba(80, 80, 80, 0.03) 25%, rgba(80, 80, 80, 0.03) 45%,rgba(239, 239, 239, 0.03) 45%, rgba(239, 239, 239, 0.03) 100%),linear-gradient(135deg, rgba(236, 236, 236, 0.03) 0%, rgba(236, 236, 236, 0.03) 47%,rgba(182, 182, 182, 0.03) 47%, rgba(182, 182, 182, 0.03) 63%,rgba(223, 223, 223, 0.03) 63%, rgba(223, 223, 223, 0.03) 81%,rgba(86, 86, 86, 0.03) 81%, rgba(86, 86, 86, 0.03) 89%,rgba(23, 23, 23, 0.03) 89%, rgba(23, 23, 23, 0.03) 90%,rgba(226, 226, 226, 0.03) 90%, rgba(226, 226, 226, 0.03) 100%),linear-gradient(45deg, rgba(52, 52, 52, 0.03) 0%, rgba(52, 52, 52, 0.03) 31%,rgba(246, 246, 246, 0.03) 31%, rgba(246, 246, 246, 0.03) 63%,rgba(188, 188, 188, 0.03) 63%, rgba(188, 188, 188, 0.03) 71%,rgba(15, 15, 15, 0.03) 71%, rgba(15, 15, 15, 0.03) 87%,rgba(127, 127, 127, 0.03) 87%, rgba(127, 127, 127, 0.03) 93%,rgba(234, 234, 234, 0.03) 93%, rgba(234, 234, 234, 0.03) 100%),linear-gradient(90deg, #FFF,#FFF)
+}
+/* 그라데이션 배경 이미지 참고 : https://www.gradientmagic.com/ */
+#myCanvas {
+  background-image: url("img/earth_from_space_600x600.jpg");
+  background-color: #eeeeee;
+  /* 배경 이미지 참고 : https://developer.mozilla.org/ko/docs/Web/CSS/background-image */
+  display: block;
+  margin: 0 auto;
+}
+#versions {
+  font-family: "Noto Sans KR";
+  text-align: right;
+  width: 600px;
+  margin: auto;
+}
+#title {
+  font-family: "Noto Sans KR";
+  text-align: center;
+  width: 600px;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+/* 블록 내 텍스트의 정렬은 text-align, 블록 자체의 정렬은 width 설정 후 margin auto 값 설정 */
+#description {
+  font-family: "Noto Sans KR";
+  font-size: 16px;
+  text-align: center;
+  width: 600px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+#difficulty_change {
+  font-family: "Noto Sans KR";
+  font-size: 16px;
+  font-weight: bold;
+  text-align: right;
+  width: 600px;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.diff_change_button {
+  font-family: "Noto Sans KR";
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  width: 60px;
+  padding: 5px;
+}
+  
+/*
+모바일 디바이스용 폰트 최적화
+창 사이즈에 연동되는 폰트 크기 설정 활용 (참고: https://css-tricks.com/viewport-sized-typography/)
+*/
+@media(max-device-width:1280px) {
   #versions {
     font-family: "Noto Sans KR";
+    font-size: 3vw;
+    /* Viewport sized typography 활용 - 1vw는 width의 1%, 1vh는 height의 1%에 연동 */
     text-align: right;
-    width: 600px;
+    width: auto;
     margin: auto;
   }
   #title {
     font-family: "Noto Sans KR";
+    font-size: 6vw;
     text-align: center;
-    width: 600px;
+    width: auto;
     margin: auto;
     margin-top: 30px;
     margin-bottom: 30px;
@@ -35,26 +85,10 @@
   /* 블록 내 텍스트의 정렬은 text-align, 블록 자체의 정렬은 width 설정 후 margin auto 값 설정 */
   #description {
     font-family: "Noto Sans KR";
-    font-size: 16px;
+    font-size: 3vw;
     text-align: center;
-    width: 600px;
+    width: auto;
     margin: auto;
+    margin-bottom: 30px;
   }
-  #difficulty_change {
-    font-family: "Noto Sans KR";
-    font-size: 16px;
-    font-weight: bold;
-    text-align: right;
-    width: 600px;
-    margin: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  .diff_change_button {
-    font-family: "Noto Sans KR";
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    width: 60px;
-    padding: 5px;
-  }
+}
