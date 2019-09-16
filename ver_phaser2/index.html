@@ -60,7 +60,6 @@
             function preload() {
                 game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
                 // scaleMode 옵션: NO_SCALE(화면 맞춤 안 함), EXACT_FIT(종횡비 상관없이 화면에 꽉 채움), SHOW_ALL(종횡비 유지하며 최대로 키움 - 레터박스 등 생길 수 있음), RESIZE & USER_SCALE(숙련자용 기능) 
-
                 
                 game.scale.pageAlignHorizontally = true;
                 /*
@@ -84,6 +83,10 @@
                 game.load.spritesheet('ball', 'img/wobble.png', 20, 20);
                 game.load.spritesheet('button', 'img/button.png', 120, 40);
                 // 단일한 이미지 대신 여러 이미지의 모음인 spritesheet를 활용할 수 있음. 이 이미지들을 순서대로 보여주며 애니메이션 효과를 만들며, 3/4번째 매개변수는 spritesheet에서 얼만큼의 너비/높이만큼을 잘라 각 프레임에 보여줄지를 설정함.
+
+                /*
+                Phaser 내부에서 벡터 그래픽 만들어 Sprite로 쓰기 (참고: https://edinix-apps.com/tech/vector-graphics-and-sprites/)
+                */
             }
 
             var text = null;

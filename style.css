@@ -63,6 +63,7 @@ body {
 /*
 모바일 디바이스용 폰트 최적화
 창 사이즈에 연동되는 폰트 크기 설정 활용 (참고: https://css-tricks.com/viewport-sized-typography/)
+추가적인 반응형 웹 디자인 관련 정보는 구글 개발자 문서 확인 (https://developers.google.com/web/fundamentals/design-and-ux/responsive/?hl=ko)
 */
 @media(max-device-width:1280px) {
   #versions {
@@ -75,7 +76,7 @@ body {
   }
   #title {
     font-family: "Noto Sans KR";
-    font-size: 6vw;
+    font-size: 5vw;
     text-align: center;
     width: auto;
     margin: auto;
@@ -85,7 +86,7 @@ body {
   /* 블록 내 텍스트의 정렬은 text-align, 블록 자체의 정렬은 width 설정 후 margin auto 값 설정 */
   #description {
     font-family: "Noto Sans KR";
-    font-size: 3vw;
+    font-size: 2vw;
     text-align: center;
     width: auto;
     margin: auto;
