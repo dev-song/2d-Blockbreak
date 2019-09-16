@@ -11,63 +11,16 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
     <title>Sangsu's first game - Blockbreak</title>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sang+KR|Black+Han+Sans|Nanum+Gothic|Nanum+Pen+Script|Lobster&display=swap" rel="stylesheet">
     <!-- 복수의 커스텀 폰트 연결 / 'Nanum Gothic', 'Nanum Pen Script', 'Lobster' from Google Fonts -->
-    <style>
-      * {
-        padding:0; margin:0;
-      }
-      /* * 선택자는 모든 element를 대상으로 함 */
-      body {
-        background-image: linear-gradient(135deg, rgba(186, 186, 186, 0.03) 0%, rgba(186, 186, 186, 0.03) 10%,rgba(133, 133, 133, 0.03) 10%, rgba(133, 133, 133, 0.03) 14%,rgba(38, 38, 38, 0.03) 14%, rgba(38, 38, 38, 0.03) 17%,rgba(93, 93, 93, 0.03) 17%, rgba(93, 93, 93, 0.03) 25%,rgba(80, 80, 80, 0.03) 25%, rgba(80, 80, 80, 0.03) 45%,rgba(239, 239, 239, 0.03) 45%, rgba(239, 239, 239, 0.03) 100%),linear-gradient(135deg, rgba(236, 236, 236, 0.03) 0%, rgba(236, 236, 236, 0.03) 47%,rgba(182, 182, 182, 0.03) 47%, rgba(182, 182, 182, 0.03) 63%,rgba(223, 223, 223, 0.03) 63%, rgba(223, 223, 223, 0.03) 81%,rgba(86, 86, 86, 0.03) 81%, rgba(86, 86, 86, 0.03) 89%,rgba(23, 23, 23, 0.03) 89%, rgba(23, 23, 23, 0.03) 90%,rgba(226, 226, 226, 0.03) 90%, rgba(226, 226, 226, 0.03) 100%),linear-gradient(45deg, rgba(52, 52, 52, 0.03) 0%, rgba(52, 52, 52, 0.03) 31%,rgba(246, 246, 246, 0.03) 31%, rgba(246, 246, 246, 0.03) 63%,rgba(188, 188, 188, 0.03) 63%, rgba(188, 188, 188, 0.03) 71%,rgba(15, 15, 15, 0.03) 71%, rgba(15, 15, 15, 0.03) 87%,rgba(127, 127, 127, 0.03) 87%, rgba(127, 127, 127, 0.03) 93%,rgba(234, 234, 234, 0.03) 93%, rgba(234, 234, 234, 0.03) 100%),linear-gradient(90deg, #FFF,#FFF)
-      }
-      /* 그라데이션 배경 이미지 참고 : https://www.gradientmagic.com/ */
-      canvas {
-        background-image: url("earth_from_space_600x600.jpg");
-        background-color: #eeeeee;
-        /* 배경 이미지 참고 : https://developer.mozilla.org/ko/docs/Web/CSS/background-image */
-        display: block;
-        margin: 0 auto;
-      }
-      #title {
-        font-family: "Noto Sans KR";
-        text-align: center;
-        width: 600px;
-        margin: auto;
-        margin-top: 30px;
-        margin-bottom: 30px;
-      }
-      /* 블록 내 텍스트의 정렬은 text-align, 블록 자체의 정렬은 width 설정 후 margin auto 값 설정 */
-      #description {
-        font-family: "Noto Sans KR";
-        font-size: 16px;
-        text-align: center;
-        width: 600px;
-        margin: auto;
-      }
-      #difficulty_change {
-        font-family: "Noto Sans KR";
-        font-size: 16px;
-        font-weight: bold;
-        text-align: right;
-        width: 600px;
-        margin: auto;
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-      .diff_change_button {
-        font-family: "Noto Sans KR";
-        font-size: 16px;
-        font-weight: bold;
-        text-align: center;
-        width: 60px;
-        padding: 5px;
-      }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- CSS 서식 다른 HTML 파일에서 공통적으로 사용할 수 있도록 별도로 분리하여 연결-->
   </head>
 
   <body>
+    <div id="versions">
+      <a href="ver_phaser2/index.html">벽돌깨기 게임 (Phaser 버전)</a>
+    </div>
     <div id="title">
-      <h1>Sangsu's 벽돌깨기 게임 (PC)</h1>
+      <h1>벽돌깨기 게임 #1</h1>
     </div>
     <div id="description">
       <p>패드를 움직여 공을 튕기고 벽돌을 부수는 단순한 게임입니다.</p>
@@ -338,7 +291,7 @@ https://developer.mozilla.org/ko/docs/Games/Tutorials/%EC%88%9C%EC%88%98%ED%95%9
       function drawDifficulty() {
         ctx.font = "20px Lobster";
         ctx.fillStyle = "#d3d3d3";
-        ctx.fillText("Difficulty: "+paddleWidth/20+" / 9", 8, 22)
+        ctx.fillText("Difficulty: "+(paddleWidth-180)/(-20)+" / 8", 8, 22)
         ctx.textAlign = "right"
       }
       // 난이도(패드 너비)를 나타내는 함수 정의
